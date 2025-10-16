@@ -1,0 +1,189 @@
+# DO NOT EDIT -- auto-updated from .gitconfig
+
+# Local Properties
+#
+android/local.properties
+
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+ios/.xcode.env.local
+
+# Android/IntelliJ
+#
+build/
+release/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+ios/Pods/
+/vendor/bundle/
+
+# Created by https://www.gitignore.io/api/ruby,fastlane
+# Edit at https://www.gitignore.io/?templates=ruby,fastlane
+
+### fastlane ###
+# fastlane - A streamlined workflow tool for Cocoa deployment
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/#source-control
+
+# fastlane specific
+fastlane/report.xml
+/fastlane/report.xml
+
+# deliver temporary files
+fastlane/Preview.html
+/fastlane/Preview.html
+
+# snapshot generated screenshots
+fastlane/screenshots/**/*.png
+fastlane/screenshots/screenshots.html
+/fastlane/screenshots/**/*.png
+f/astlane/screenshots/screenshots.html
+
+# scan temporary files
+fastlane/test_output
+/fastlane/test_output
+
+### Ruby ###
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# Used by dotenv library to load environment variables.
+.env*
+
+# Ignore Byebug command history file.
+.byebug_history
+
+## Specific to RubyMotion:
+.dat*
+.repl_history
+build/
+*.bridgesupport
+build-iPhoneOS/
+build-iPhoneSimulator/
+
+## Specific to RubyMotion (use of CocoaPods):
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are mentioned at:
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+# vendor/Pods/
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+## Environment normalization:
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# for a library or gem, you might want to ignore these files since the code is
+# intended to run in multiple environments; otherwise, check them in:
+# Gemfile.lock
+# .ruby-version
+# .ruby-gemset
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
+
+### Ruby Patch ###
+# Used by RuboCop. Remote config files pulled in from inherit_from directive.
+# .rubocop-https?--*
+
+# End of https://www.gitignore.io/api/ruby,fastlane
+ios/builds/
+
+google-key.json
+
+local_tests/
+
+## Detox test Android - testbutler
+temp/
+*.log
+
+# Android Studio
+local.properties
+android/.project
+android/.classpath
+android/.settings/
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# testing
+/coverage
+
+# Expo
+.expo
+dist/
+packager/
+/android
+/ios
+build-*.aab
+build-*.apk
+build-*.ipa
+expo-env.d.ts
+
+# Cursor
+.cursor/
+# DO NOT EDIT -- auto-updated from .gitconfig
