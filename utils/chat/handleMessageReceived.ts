@@ -1,3 +1,6 @@
+import { PartialMessage } from "../partials";
+import { AgentMessage } from "./models/AgentMessage";
+import { UserMessage } from "./models/UserMessage";
 
 // This is a stateless function that handles incoming chat messages and updates the state machine accordingly.
 export function handleMessageReceived(currentState: State, message: { event: string, data: object }): State {
@@ -94,24 +97,6 @@ type NetworkPayloadComponentStart =  { event: "component_start"; messageId: stri
 type NetworkPayloadComponentField =  { event: "component_field"; messageId: string; field: string; value: string; };
 // type NetworkPayloadComponentEnd =  { event: "component_end"; messageId: string; }; // Not needed as a type since it has no extra data
 
-// Message types
-export type UserMessage = {
-	role: "user";
-	messageId: string;
-	content: {
-		text: string;
-	};
-}; 
-
-export type AgentMessage = {
-	role: "agent";
-	messageId: string;
-	content: {
-		text: string;
-		component: PartialComponent<ContactBadgeComponent> | PartialComponent<CalendarEventComponent>;
-	}
-}
-
 // ***** Finite state machine types
 
 export type State = Idle | BuildingMessageText | BuildingMessageComponent | FinishedBuildingMessageComponent | FinishedBuildingMessage;
@@ -138,37 +123,3 @@ type FinishedBuildingMessage = {
 	state: "finished_building_message";
 	message: UserMessage | AgentMessage;
 };
-
-// Related types
-type MessageRole = "user" | "agent";
-
-type ContactBadgeComponent = {
-	type: "contact_badge";
-	metadata: {
-		name: string;
-		email: string;
-		company: string;
-		profilePicture: string;
-	};
-};
-
-type CalendarEventComponent = {
-	type: "calendar_event";
-	metadata: {
-		title: string;
-		date: string;
-		time: string;
-		status: "PROPOSED" | "CONFIRMED" | "CANCELLED"; 
-	};
-};
-
-export type PartialComponent<T extends { type: string; metadata: object }> = {
-	type: T["type"];
-	metadata: Partial<T["metadata"]>;
-};
-
-export type PartialMessage<T extends { role: MessageRole ; messageId: string; content: object; }> = {
-	role: T["role"];
-	messageId: T["messageId"];
-	content: Partial<T["content"]>;
-}

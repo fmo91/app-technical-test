@@ -1,4 +1,7 @@
-import { AgentMessage, handleMessageReceived, PartialMessage, State, UserMessage } from "./handleMessageReceived";
+import { PartialMessage } from "../partials";
+import { handleMessageReceived, State } from "./handleMessageReceived";
+import { AgentMessage } from "./models/AgentMessage";
+import { UserMessage } from "./models/UserMessage";
 
 export class Chat {
 	state: State;
