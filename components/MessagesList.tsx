@@ -15,12 +15,14 @@ export default function MessagesList({
 		data={messagesList}
 		keyExtractor={(item) => item.messageId}
 		renderItem={({ item }) => {
-			if (item.role === 'user') {
-				return <UserMessageRow item={item} />;
-			} else if (item.role === 'agent') {
-				return <AgentMessageRow item={item} />;
+			switch (item.role) {
+				case 'user':
+					return <UserMessageRow item={item} />;
+				case 'agent':
+					return <AgentMessageRow item={item} />;
+				default:
+					return <></>; // TODO: Handle this case properly
 			}
-			return <></> // TODO: Handle this case properly
 		}}
 	/>;
 }
