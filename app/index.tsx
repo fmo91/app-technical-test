@@ -7,7 +7,6 @@ import {
   Pressable,
   FlatList
 } from 'react-native';
-import EventSource from 'react-native-sse';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticImpact } from '@/utils/haptics';
@@ -58,10 +57,13 @@ export default function ChatScreen() {
         <Pressable
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
           onPress={() => {}}
-          onPressIn={() => hapticImpact(ImpactFeedbackStyle.Light)}
+          onPressIn={() => {
+            store.toggleIsStreaming();
+            hapticImpact(ImpactFeedbackStyle.Light);
+          }}
         >
           <Text style={styles.buttonText}>
-            Start Stream
+            {store.isStreaming ? "Stop Streaming" : "Start Streaming"}
           </Text>
         </Pressable>
       </View>

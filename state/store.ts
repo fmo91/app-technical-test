@@ -10,15 +10,19 @@ type InProgressMessage = PartialMessage<UserMessage> | PartialMessage<AgentMessa
 interface ChatState {
 	messages: ChatMessage[];
 	currentMessage: InProgressMessage | null;
+	isStreaming: boolean;
 	setMessage: (message: InProgressMessage | null) => void;
 	addMessage: (message: ChatMessage) => void;
+	toggleIsStreaming: () => void;
 }
 
 export const useChatStore = create<ChatState>()((set) => ({
 	messages: [],
 	currentMessage: null,
+	isStreaming: false,
 	setMessage: message => set((state) => ({ ...state, currentMessage: message })),
 	addMessage: (message: ChatMessage) => set((state) => {
 		return { ...state, messages: [...state.messages, message] };
 	}),
+	toggleIsStreaming: () => set((state) => ({ ...state, isStreaming: !state.isStreaming })),
 }));
