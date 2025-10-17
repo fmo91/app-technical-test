@@ -29,7 +29,7 @@ function handleMessageStartReceived(currentState: State, payload: NetworkPayload
 			role: payload.role,
 			messageId: payload.messageId,
 			content: {
-				text: "",
+				textChunks: [],
 			}
 		}
 	};
@@ -44,7 +44,7 @@ function handleTextChunkReceived(currentState: State, payload: NetworkPayloadTex
 			...state.message,
 			content: {
 				...state.message.content,
-				text: state.message.content.text + payload.chunk,
+				textChunks: [...state.message.content.textChunks, payload.chunk],
 			}
 		}
 	};

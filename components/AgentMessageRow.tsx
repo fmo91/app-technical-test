@@ -13,7 +13,7 @@ export default function AgentMessageRow({ item }: { item: AgentMessage }) {
 	<View style={styles.container}>
 	  <View style={styles.bubble}>
 		<Text style={styles.roleLabel}>{item.role.toUpperCase()}</Text>
-		{content?.text ? <Text style={styles.message}>{content.text}</Text> : null}
+		{content?.textChunks.length ? <Text style={styles.message}>{content.textChunks.join("")}</Text> : null}
 		{content?.component ? renderComponent(content.component) : null}
 	  </View>
 	</View>

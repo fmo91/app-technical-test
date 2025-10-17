@@ -2,7 +2,7 @@ export type AgentMessage = {
 	role: "agent";
 	messageId: string;
 	content: {
-		text: string;
+		textChunks: string[];
 		component?: PartialComponent<ContactBadgeComponent> | PartialComponent<CalendarEventComponent>;
 	}
 }

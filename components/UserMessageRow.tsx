@@ -6,7 +6,7 @@ export default function UserMessageRow({ item }: { item: UserMessage }) {
   return (
 	<View style={styles.container}>
 	  <View style={styles.bubble}>
-		<Text style={styles.message}>{item.content.text}</Text>
+		<Text style={styles.message}>{item.content.textChunks.join("")}</Text>
 	  </View>
 	</View>
   );
