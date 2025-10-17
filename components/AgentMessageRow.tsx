@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import type { AgentMessage } from '../utils/chat/models/AgentMessage';
+import type { AgentMessage, AgentMessageComponent, CalendarEventComponentMetadata, ContactBadgeComponentMetadata } from '../utils/chat/models/AgentMessage';
 import StreamingText from './StreamingText';
-
-type AgentComponent = NonNullable<AgentMessage['content']['component']>;
-type ContactBadgeMetadata = Extract<AgentComponent, { type: 'contact_badge' }>['metadata'];
-type CalendarEventMetadata = Extract<AgentComponent, { type: 'calendar_event' }>['metadata'];
 
 export default function AgentMessageRow({ item }: { item: AgentMessage }) {
   const { content } = item;
@@ -23,7 +19,7 @@ export default function AgentMessageRow({ item }: { item: AgentMessage }) {
   );
 }
 
-function renderComponent(component: AgentComponent) {
+function renderComponent(component: AgentMessageComponent) {
   switch (component.type) {
 	case 'contact_badge':
 	  return <ContactBadge metadata={component.metadata ?? {}} />;
@@ -34,7 +30,7 @@ function renderComponent(component: AgentComponent) {
   }
 }
 
-function ContactBadge({ metadata }: { metadata: ContactBadgeMetadata }) {
+function ContactBadge({ metadata }: { metadata: ContactBadgeComponentMetadata }) {
   const { name, email, company, profilePicture } = metadata ?? {};
   const showAvatar = typeof profilePicture === 'string' && profilePicture.length > 0;
   const initial = name ? name.trim().charAt(0).toUpperCase() : '?';
@@ -57,7 +53,7 @@ function ContactBadge({ metadata }: { metadata: ContactBadgeMetadata }) {
   );
 }
 
-function CalendarEventCard({ metadata }: { metadata: CalendarEventMetadata }) {
+function CalendarEventCard({ metadata }: { metadata: CalendarEventComponentMetadata }) {
   const { title, date, time, status } = metadata ?? {};
 
   return (

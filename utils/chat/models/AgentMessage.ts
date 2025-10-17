@@ -3,31 +3,36 @@ export type AgentMessage = {
 	messageId: string;
 	content: {
 		textChunks: string[];
-		component?: PartialComponent<ContactBadgeComponent> | PartialComponent<CalendarEventComponent>;
+		component?: AgentMessageComponent;
 	}
 }
 
-type PartialComponent<T extends { type: string; metadata: object }> = {
-	type: T["type"];
-	metadata: Partial<T["metadata"]>;
-};
+// ContactBadgeComponent
+export type AgentMessageComponent =
+  | ContactBadgeComponent
+  | CalendarEventComponent;
 
 type ContactBadgeComponent = {
 	type: "contact_badge";
-	metadata: {
-		name: string;
-		email: string;
-		company: string;
-		profilePicture: string;
-	};
+	metadata: ContactBadgeComponentMetadata;
 };
 
+export type ContactBadgeComponentMetadata = Partial<{
+	name: string;
+	email: string;
+	company: string;
+	profilePicture: string;
+}>;
+
+// CalendarEventComponent
 type CalendarEventComponent = {
 	type: "calendar_event";
-	metadata: {
-		title: string;
-		date: string;
-		time: string;
-		status: "PROPOSED" | "CONFIRMED" | "CANCELLED"; 
-	};
+	metadata: CalendarEventComponentMetadata;
 };
+
+export type CalendarEventComponentMetadata = Partial<{
+	title: string;
+	date: string;
+	time: string;
+	status: "PROPOSED" | "CONFIRMED" | "CANCELLED"; 
+}>;
