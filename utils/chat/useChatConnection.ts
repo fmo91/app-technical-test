@@ -1,19 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import EventSource from 'react-native-sse';
 import { Chat } from "./chat";
 import { ChatMessage } from "./models/ChatMessage";
 
 export function useChatConnection(
-	url: string, 
-	onMessagesChange: (messages: ChatMessage[]) => void, 
-) {
+	url: string,
+): ChatMessage[] {
+	const [messages, setMessages] = useState<ChatMessage[]>([]);
+	const eventSourceRef = useRef<EventSource | null>(null);
 	const chatRef = useRef<Chat | null>(null);
 
 	useEffect(() => {
 		const chat = new Chat();
 		chatRef.current = chat;
-
+		
 		const eventSource = new EventSource(url);
+		eventSourceRef.current = eventSource;
 		const supportedEvents = [
 			'message_start',
 			'text_chunk',
@@ -33,7 +35,7 @@ export function useChatConnection(
 				if (chat.currentMessage) {
 					messages = [...messages, chat.currentMessage];
 				}
-				onMessagesChange(messages);
+				setMessages(messages);
 			} catch (err) {
 				console.warn('Bad payload', err);
 			}
@@ -49,6 +51,9 @@ export function useChatConnection(
 			);
 			eventSource.close();
 			chatRef.current = null;
+			eventSourceRef.current = null;
 		};
 	}, []);
+
+	return messages;
 }

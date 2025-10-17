@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticImpact } from '@/utils/haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import MessagesList from '../components/MessagesList';
-import { ChatMessage } from '@/state/store';
+import { ChatMessage } from '@/utils/chat/models/ChatMessage';
 
 interface ChatScreenContentProps {
 	messagesList: ChatMessage[];
