@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import type { AgentMessage } from '../utils/chat/models/AgentMessage';
+import StreamingText from './StreamingText';
 
 type AgentComponent = NonNullable<AgentMessage['content']['component']>;
 type ContactBadgeMetadata = Extract<AgentComponent, { type: 'contact_badge' }>['metadata'];
@@ -13,7 +14,9 @@ export default function AgentMessageRow({ item }: { item: AgentMessage }) {
 	<View style={styles.container}>
 	  <View style={styles.bubble}>
 		<Text style={styles.roleLabel}>{item.role.toUpperCase()}</Text>
-		{content?.textChunks.length ? <Text style={styles.message}>{content.textChunks.join("")}</Text> : null}
+		{content?.textChunks.length ? (
+		  <StreamingText chunks={content.textChunks} messageId={item.messageId} />
+		) : null}
 		{content?.component ? renderComponent(content.component) : null}
 	  </View>
 	</View>
@@ -111,11 +114,6 @@ const styles = StyleSheet.create({
 	color: '#6b6b6b',
 	marginBottom: 4,
 	textAlign: 'left',
-  },
-  message: {
-	fontSize: 15,
-	color: '#1a1a1a',
-	marginBottom: 8,
   },
   contactCard: {
 	flexDirection: 'row',
