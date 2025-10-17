@@ -18,8 +18,19 @@ export const useChatStore = create<ChatState>()((set) => ({
 	messages: [],
 	currentMessage: null,
 	isStreaming: false,
-	setMessage: message => set((state) => ({ ...state, currentMessage: message })),
+	setMessage: message => set((state) => {
+		if (state.messages.map(msg => msg.messageId).includes(message?.messageId ?? "")) {
+			// Duplicate message, ignore
+			return state;
+		}
+		return { ...state, currentMessage: message }
+	}),
 	addMessage: (message: ChatMessage) => set((state) => {
+		if (state.messages.map(msg => msg.messageId).includes(message.messageId)) {
+			// Duplicate message, ignore
+			return state;
+		}
+
 		return { ...state, messages: [...state.messages, message] };
 	}),
 	toggleIsStreaming: () => set((state) => ({ ...state, isStreaming: !state.isStreaming })),

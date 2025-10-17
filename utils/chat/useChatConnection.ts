@@ -33,7 +33,6 @@ export function useChatConnection(
 				});
 				onCurrentMessageUpdate(chat.currentMessage!);
 				if (chat.state.state === 'finished_building_message') {
-					console.log('Adding message to store', chat.state.message);
 					onMessageComplete(chat.state.message);
 				}
 			} catch (err) {
