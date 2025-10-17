@@ -14,6 +14,7 @@ import { hapticImpact } from '@/utils/haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useChatStore } from '@/state/store';
 import { Chat } from '@/utils/chat/chat';
+import { useChatConnection } from '@/utils/chat/useChatConnection';
 
 const chat = new Chat();
 
@@ -21,46 +22,15 @@ export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const store = useChatStore();
 
-  useEffect(() => {
-    const eventSource = new EventSource("https://api-dev.withallo.com/v1/demo/interview/conversation");
-    const supportedEvents = [
-      'message_start',
-      'text_chunk',
-      'message_end',
-      'component_start',
-      'component_field',
-      'component_end',
-    ];
-
-    const handleEvent = (event: MessageEvent<string>) => {
-      try {
-        chat.handleIncomingMessage({
-          event: event.type,
-          data: JSON.parse(event.data ?? '{}'),
-        });
-
-        store.setMessage(chat.currentMessage);
-        if (chat.state.state === 'finished_building_message') {
-          console.log('Adding message to store', chat.state.message);
-          store.addMessage(chat.state.message);
-        }
-
-      } catch (err) {
-        console.warn('Bad payload', err);
-      }
-    };
-
-    supportedEvents.forEach((eventName) =>
-      eventSource.addEventListener(eventName as any, handleEvent),
-    );
-
-    return () => {
-      supportedEvents.forEach((eventName) =>
-        eventSource.removeEventListener(eventName as any, handleEvent),
-      );
-      eventSource.close();
-    };
-  }, []);
+  useChatConnection(
+    'https://api-dev.withallo.com/v1/demo/interview/conversation',
+    (currentMessage) => {
+      store.setMessage(currentMessage);
+    },
+    (message) => {
+      store.addMessage(message);
+    },
+  );
 
   return (
     <View style={styles.container}>

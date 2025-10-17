@@ -14,9 +14,6 @@ interface ChatState {
 	addMessage: (message: ChatMessage) => void;
 }
 
-const chatInstance = new Chat();
-const isTestEnv = typeof process !== "undefined" && process.env?.NODE_ENV === "test";
-
 export const useChatStore = create<ChatState>()((set) => ({
 	messages: [],
 	currentMessage: null,
