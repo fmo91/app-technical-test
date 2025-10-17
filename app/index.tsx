@@ -14,6 +14,8 @@ import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useChatStore } from '@/state/store';
 import { Chat } from '@/utils/chat/chat';
 import { useChatConnection } from '@/utils/chat/useChatConnection';
+import UserMessageRow from '@/components/UserMessageRow';
+import AgentMessageRow from '@/components/AgentMessageRow';
 
 const chat = new Chat();
 
@@ -39,12 +41,14 @@ export default function ChatScreen() {
         <FlatList
           data={store.messages}
           keyExtractor={(item) => item.messageId}
-          renderItem={({ item }) => (
-            <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
-              <Text style={{ fontWeight: 'bold' }}>{item.role.toUpperCase()}</Text>
-              <Text>{item.content.text}</Text>
-            </View>
-          )}
+          renderItem={({ item }) => {
+            if (item.role === 'user') {
+              return <UserMessageRow item={item} />;
+            } else if (item.role === 'agent') {
+              return <AgentMessageRow item={item} />;
+            }
+            return <></> // TODO: Handle this case properly
+          }}
         />
       </View>
 
