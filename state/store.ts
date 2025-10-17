@@ -1,5 +1,13 @@
 import { create } from 'zustand'
 
-export const useChatStore = create((set) => ({
+interface ChatMessage {
+
+}
+
+interface ChatState {
+	messages: ChatMessage[];
+}
+
+export const useChatStore = create<ChatState>()((set) => ({
 	messages: [],
 }))
