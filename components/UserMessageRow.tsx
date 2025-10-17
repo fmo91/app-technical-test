@@ -1,7 +1,8 @@
+import { UserMessage } from '@/utils/chat/models/UserMessage';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function UserMessageRow({ item }: { item: any }) {
+export default function UserMessageRow({ item }: { item: UserMessage }) {
   return (
 	<View style={styles.container}>
 	  <View style={styles.bubble}>
