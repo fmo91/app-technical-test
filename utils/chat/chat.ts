@@ -1,4 +1,3 @@
-import { PartialMessage } from "../partials";
 import { handleMessageReceived, State } from "./handleMessageReceived";
 import { AgentMessage } from "./models/AgentMessage";
 import { UserMessage } from "./models/UserMessage";
@@ -6,7 +5,7 @@ import { UserMessage } from "./models/UserMessage";
 export class Chat {
 	state: State;
 	messages: (AgentMessage | UserMessage)[];
-	currentMessage: PartialMessage<AgentMessage> | PartialMessage<UserMessage> | null;
+	currentMessage: AgentMessage | UserMessage | null;
 
 	constructor() {
 		this.state = { state: "idle" };

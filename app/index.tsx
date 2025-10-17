@@ -11,11 +11,13 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticImpact } from '@/utils/haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
-import { useChatStore } from '@/state/store';
+import { ChatMessage, useChatStore } from '@/state/store';
 import { Chat } from '@/utils/chat/chat';
 import { useChatConnection } from '@/utils/chat/useChatConnection';
 import UserMessageRow from '@/components/UserMessageRow';
 import AgentMessageRow from '@/components/AgentMessageRow';
+import { AgentMessage } from '@/utils/chat/models/AgentMessage';
+import { UserMessage } from '@/utils/chat/models/UserMessage';
 
 const chat = new Chat();
 
@@ -33,13 +35,18 @@ export default function ChatScreen() {
     },
   );
 
+  const messagesList = [...store.messages];
+  if (store.currentMessage) {
+    messagesList.push(store.currentMessage);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
       <View style={styles.content}>
         <FlatList
-          data={store.messages}
+          data={[...store.messages]}
           keyExtractor={(item) => item.messageId}
           renderItem={({ item }) => {
             if (item.role === 'user') {

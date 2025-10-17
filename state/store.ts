@@ -1,17 +1,15 @@
 import { Chat } from '@/utils/chat/chat';
 import { AgentMessage } from '@/utils/chat/models/AgentMessage';
 import { UserMessage } from '@/utils/chat/models/UserMessage';
-import { PartialMessage } from '@/utils/partials';
 import { create, } from 'zustand';
 
-type ChatMessage = AgentMessage | UserMessage;
-type InProgressMessage = PartialMessage<UserMessage> | PartialMessage<AgentMessage>;
+export type ChatMessage = AgentMessage | UserMessage;
 
 interface ChatState {
 	messages: ChatMessage[];
-	currentMessage: InProgressMessage | null;
+	currentMessage: ChatMessage | null;
 	isStreaming: boolean;
-	setMessage: (message: InProgressMessage | null) => void;
+	setMessage: (message: ChatMessage | null) => void;
 	addMessage: (message: ChatMessage) => void;
 	toggleIsStreaming: () => void;
 }

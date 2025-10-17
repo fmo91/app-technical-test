@@ -2,12 +2,11 @@ import { useEffect, useRef } from "react";
 import EventSource from 'react-native-sse';
 import { Chat } from "./chat";
 import { UserMessage } from "./models/UserMessage";
-import { PartialMessage } from "../partials";
 import { AgentMessage } from "./models/AgentMessage";
 
 export function useChatConnection(
 	url: string, 
-	onCurrentMessageUpdate: (message: PartialMessage<UserMessage> | PartialMessage<AgentMessage>) => void,
+	onCurrentMessageUpdate: (message: UserMessage | AgentMessage) => void,
 	onMessageComplete: (message: UserMessage | AgentMessage) => void, 
 ) {
 	const chatRef = useRef<Chat | null>(null);

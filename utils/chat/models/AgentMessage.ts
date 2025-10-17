@@ -3,7 +3,7 @@ export type AgentMessage = {
 	messageId: string;
 	content: {
 		text: string;
-		component: PartialComponent<ContactBadgeComponent> | PartialComponent<CalendarEventComponent>;
+		component?: PartialComponent<ContactBadgeComponent> | PartialComponent<CalendarEventComponent>;
 	}
 }
 

@@ -1,4 +1,3 @@
-import { PartialMessage } from "../partials";
 import { AgentMessage } from "./models/AgentMessage";
 import { UserMessage } from "./models/UserMessage";
 
@@ -107,15 +106,15 @@ type Idle = { state: "idle" };
 // this is the case in which I have received a message_start but no message_end yet
 type BuildingMessageText = {
 	state: "building_message_text";
-	message: PartialMessage<UserMessage> | PartialMessage<AgentMessage>;
+	message: UserMessage | AgentMessage;
 };
 type BuildingMessageComponent = {
 	state: "building_message_component";
-	message: PartialMessage<AgentMessage>;
+	message: AgentMessage;
 };
 type FinishedBuildingMessageComponent = {
 	state: "finished_building_message_component";
-	message: PartialMessage<AgentMessage>;
+	message: AgentMessage;
 };
 
 // Here I have received message_end, so I have a complete message, and I am waiting for the next message_start
