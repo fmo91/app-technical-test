@@ -1,25 +1,82 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   View, 
   Text, 
   StyleSheet,
   StatusBar,
-  Pressable
+  Pressable,
+  FlatList
 } from 'react-native';
+import EventSource from 'react-native-sse';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticImpact } from '@/utils/haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useChatStore } from '@/state/store';
+import { Chat } from '@/utils/chat/chat';
+
+const chat = new Chat();
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
+  const store = useChatStore();
+
+  useEffect(() => {
+    const eventSource = new EventSource("https://api-dev.withallo.com/v1/demo/interview/conversation");
+    const supportedEvents = [
+      'message_start',
+      'text_chunk',
+      'message_end',
+      'component_start',
+      'component_field',
+      'component_end',
+    ];
+
+    const handleEvent = (event: MessageEvent<string>) => {
+      try {
+        chat.handleIncomingMessage({
+          event: event.type,
+          data: JSON.parse(event.data ?? '{}'),
+        });
+
+        store.setMessage(chat.currentMessage);
+        if (chat.state.state === 'finished_building_message') {
+          console.log('Adding message to store', chat.state.message);
+          store.addMessage(chat.state.message);
+        }
+
+      } catch (err) {
+        console.warn('Bad payload', err);
+      }
+    };
+
+    supportedEvents.forEach((eventName) =>
+      eventSource.addEventListener(eventName as any, handleEvent),
+    );
+
+    return () => {
+      supportedEvents.forEach((eventName) =>
+        eventSource.removeEventListener(eventName as any, handleEvent),
+      );
+      eventSource.close();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
       <View style={styles.content}>
-
+        <FlatList
+          data={store.messages}
+          keyExtractor={(item) => item.messageId}
+          renderItem={({ item }) => (
+            <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
+              <Text style={{ fontWeight: 'bold' }}>{item.role.toUpperCase()}</Text>
+              <Text>{item.content.text}</Text>
+            </View>
+          )}
+        />
       </View>
 
       <View
