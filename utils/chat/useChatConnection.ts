@@ -1,13 +1,11 @@
 import { useEffect, useRef } from "react";
 import EventSource from 'react-native-sse';
 import { Chat } from "./chat";
-import { UserMessage } from "./models/UserMessage";
-import { AgentMessage } from "./models/AgentMessage";
+import { ChatMessage } from "./models/ChatMessage";
 
 export function useChatConnection(
 	url: string, 
-	onCurrentMessageUpdate: (message: UserMessage | AgentMessage) => void,
-	onMessageComplete: (message: UserMessage | AgentMessage) => void, 
+	onMessagesChange: (messages: ChatMessage[]) => void, 
 ) {
 	const chatRef = useRef<Chat | null>(null);
 
@@ -31,10 +29,11 @@ export function useChatConnection(
 					event: event.type,
 					data: JSON.parse(event.data ?? '{}'),
 				});
-				onCurrentMessageUpdate(chat.currentMessage!);
-				if (chat.state.state === 'finished_building_message') {
-					onMessageComplete(chat.state.message);
+				let messages = chat.messages;
+				if (chat.currentMessage) {
+					messages = [...messages, chat.currentMessage];
 				}
+				onMessagesChange(messages);
 			} catch (err) {
 				console.warn('Bad payload', err);
 			}
