@@ -11,15 +11,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticImpact } from '@/utils/haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
-import { ChatMessage, useChatStore } from '@/state/store';
-import { Chat } from '@/utils/chat/chat';
+import { useChatStore } from '@/state/store';
 import { useChatConnection } from '@/utils/chat/useChatConnection';
 import UserMessageRow from '@/components/UserMessageRow';
 import AgentMessageRow from '@/components/AgentMessageRow';
-import { AgentMessage } from '@/utils/chat/models/AgentMessage';
-import { UserMessage } from '@/utils/chat/models/UserMessage';
-
-const chat = new Chat();
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
@@ -46,7 +41,7 @@ export default function ChatScreen() {
 
       <View style={styles.content}>
         <FlatList
-          data={[...store.messages]}
+          data={messagesList}
           keyExtractor={(item) => item.messageId}
           renderItem={({ item }) => {
             if (item.role === 'user') {

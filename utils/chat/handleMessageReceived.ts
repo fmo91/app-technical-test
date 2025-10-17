@@ -36,12 +36,18 @@ function handleMessageStartReceived(currentState: State, payload: NetworkPayload
 }
 
 function handleTextChunkReceived(currentState: State, payload: NetworkPayloadTextChunk): State {
-	const textChunkCurrentState = currentState as BuildingMessageText;
-
-	textChunkCurrentState.message.content.text += payload.chunk;
-
+	const state = currentState as BuildingMessageText;
 	// TODO: Think of using Immer here. I preferred to keep it simple for now.
-	return textChunkCurrentState;
+	return {
+		...state,
+		message: {
+			...state.message,
+			content: {
+				...state.message.content,
+				text: state.message.content.text + payload.chunk,
+			}
+		}
+	};
 }
 
 function handleMessageEndReceived(currentState: State): State {
@@ -53,28 +59,48 @@ function handleMessageEndReceived(currentState: State): State {
 }
 
 function handleComponentStartReceived(currentState: State, payload: NetworkPayloadComponentStart): State {
-	const componentStartCurrentState = currentState as BuildingMessageText;
+	const state = currentState as BuildingMessageText;
 
-	const componentStartAgentMessage = componentStartCurrentState.message as AgentMessage;
-	componentStartAgentMessage.content.component = {
-		type: payload.componentType,
-		metadata: {},
-	};
-	componentStartCurrentState.message = componentStartAgentMessage;
+	const agentMessage = state.message as AgentMessage;
 
-	return {
+	const newState: BuildingMessageComponent = {
 		state: "building_message_component",
-		message: componentStartCurrentState.message as AgentMessage,
+		message: {
+			...agentMessage,
+			content: {
+				...agentMessage.content,
+				component: {
+					type: payload.componentType,
+					metadata: {},
+				}
+			}
+		}
 	};
+
+	return newState
 }
 
 function handleComponentFieldReceived(currentState: State, payload: NetworkPayloadComponentField): State {
-	const componentFieldCurrentState = currentState as BuildingMessageComponent;
-	componentFieldCurrentState.message.content.component!.metadata = {
-		...componentFieldCurrentState.message.content.component!.metadata,
-		[payload.field]: payload.value,
+	const state = currentState as BuildingMessageComponent;
+	const newState: BuildingMessageComponent = {
+		...state,
+		message: {
+			...state.message,
+			content: {
+				...state.message.content,
+				component: {
+					...state.message.content.component!,
+					// @ts-ignore
+					metadata: {
+						...state.message.content.component!.metadata,
+						[payload.field]: payload.value,
+					}
+				}
+			}
+		}
 	};
-	return componentFieldCurrentState;
+
+	return newState;
 }
 
 function handleComponentEndReceived(currentState: State): State {
