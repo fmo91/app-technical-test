@@ -1,20 +1,29 @@
 import React from 'react';
 import ChatScreenContent from './ChatScreenContent';
-import { useChatConnection } from '@/utils/chat/useChatConnection';
+import { useAppSelector } from "../redux/hooks";
+import { selectMessages, startStreaming } from "../redux/features/chatSlice";
+import { Provider, useDispatch } from 'react-redux';
+import { store } from '@/redux/store';
 
-export default function ChatScreen() {
-  const [isStreaming, setIsStreaming] = React.useState(false);
+function ChatScreen() {
+  const messages = useAppSelector(selectMessages);
+  const isStreaming = useAppSelector(state => state.chat.isStreaming);
 
-  const messages = useChatConnection(
-    'https://api-dev.withallo.com/v1/demo/interview/conversation',
-    isStreaming,
-  );
+  const dispatch = useDispatch();
 
   return (
     <ChatScreenContent 
       messagesList={messages}
       isStreaming={isStreaming}
-      toggleIsStreaming={() => setIsStreaming(!isStreaming)}
+      toggleIsStreaming={() => dispatch(startStreaming())}
     />
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <ChatScreen />
+    </Provider>
   );
 }

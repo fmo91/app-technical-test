@@ -117,10 +117,8 @@ function verifyEventIsValid(state: State, event: string) {
 // Networking messages
 type NetworkPayloadMessageStart =  { event: "message_start"; messageId: string; role: "user" | "agent"; };
 type NetworkPayloadTextChunk =  { event: "text_chunk"; messageId: string; chunk: string; index: number; };
-// type NetworkPayloadMessageEnd =  { event: "message_end"; messageId: string; }; // Not needed as a type since it has no extra data
 type NetworkPayloadComponentStart =  { event: "component_start"; messageId: string; componentType: "contact_badge" | "calendar_event"; };
 type NetworkPayloadComponentField =  { event: "component_field"; messageId: string; field: string; value: string; };
-// type NetworkPayloadComponentEnd =  { event: "component_end"; messageId: string; }; // Not needed as a type since it has no extra data
 
 // ***** Finite state machine types
 
