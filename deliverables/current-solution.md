@@ -97,6 +97,10 @@ A big advantage of using Redux is that I can now inspect the state using [Reacto
 
 ### AI/LLM usage for development
 
+This is a small note. I didn't want to use AI/LLM such as Codex or Claude Code to solve the problem. I wanted to highlight what I already knew, plus some things I have researched in the middle of the assignment.
+
+However, in the real work, how LLMs handle my codebase would influence the set of tools I would choose for the implementation. Reducing the context for the LLM to ingest and using widely known tools are very important constraints in real life settings.
+
 ## Shortcomings
 
 Unfortunately, this solution still has several shortcomings I'm not happy with. Things I didn't handle so far:
