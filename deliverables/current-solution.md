@@ -72,6 +72,73 @@ This worked well for me in my tests and looked much more natural.
 
 ### Composing custom components from SSE events
 
+Custom components were one of the most interesting parts of the exercise. The goals for the implementation of those were:
+
+1. Make them as generic as possible. A component is just a payload and a UI component associated to it. They should fit the overall architecture, they shouldn't be treated as special cases.
+2. Make them extendable. Adding a new component should be as simple as defining the component payload shape, its type name, and the UI for it.
+
+Let's explore the design for one of them:
+
+The `contact_badge` component has its type definition [here](https://github.com/fmo91/app-technical-test/blob/main/utils/chat/models/AgentMessage.ts#L15-L25):
+
+```typescript
+type ContactBadgeComponent = {
+	type: "contact_badge";
+	metadata: ContactBadgeComponentMetadata;
+};
+
+export type ContactBadgeComponentMetadata = Partial<{
+	name: string;
+	email: string;
+	company: string;
+	profilePicture: string;
+}>;
+```
+
+The metadata has to be `Partial`, as we will be receiving it in parts (I haven't written this in any other part, but the messages are also stored in chunks, because that is how they are appearing on the screen and allows us to make some nice animations).
+
+The `ContactBadgeComponent` links a `type` to the `metadata` definition.
+
+In [`AgentMessageRow.tsx`](https://github.com/fmo91/app-technical-test/blob/main/components/AgentMessageRow.tsx), we have a function which determines which component must be rendered based on a type (see [here](https://github.com/fmo91/app-technical-test/blob/main/components/AgentMessageRow.tsx#L22-L31)).
+
+For hte `contact_badge` type, we render a [`ContactBadge`](https://github.com/fmo91/app-technical-test/blob/main/components/AgentMessageRow.tsx#L33-L54) component:
+
+```typescript
+
+function ContactBadge({ metadata }: { metadata: ContactBadgeComponentMetadata }) {
+  const { name, email, company, profilePicture } = metadata ?? {};
+  const showAvatar = typeof profilePicture === 'string' && profilePicture.length > 0;
+  const initial = name ? name.trim().charAt(0).toUpperCase() : '?';
+
+  return (
+	<View style={styles.contactCard}>
+	  {showAvatar ? (
+		<Image source={{ uri: profilePicture }} style={styles.avatar} />
+	  ) : (
+		<View style={styles.avatarFallback}>
+		  <Text style={styles.avatarFallbackText}>{initial}</Text>
+		</View>
+	  )}
+	  <View style={styles.contactDetails}>
+		{name ? <Text style={styles.contactName}>{name}</Text> : null}
+		{company ? <Text style={styles.contactCompany}>{company}</Text> : null}
+		{email ? <Text style={styles.contactEmail}>{email}</Text> : null}
+	  </View>
+	</View>
+  );
+}
+```
+
+And that's it.
+
+So, let's say we want to create a new component. We would need to:
+
+1. Add a new type definition to the [`AgentMessageComponent`](https://github.com/fmo91/app-technical-test/blob/main/utils/chat/models/AgentMessage.ts#L11-L13) type. Include both a root type for linking the type to the metadata typings, and another type for describing the shape of the metadata.
+2. Create a new UI component, which accepts the metadata type as a property and translates it into a visual representation of it.
+2. Add a new case in [`renderComponent`](https://github.com/fmo91/app-technical-test/blob/main/components/AgentMessageRow.tsx#L22-L31), to link the component type to the UI definition.
+
+I'm sure this can be further simplified. However, this is good enough to be extendable for new component cases.
+
 ### Managing State
 
 On this one, I also tried three different solutions. I'm conscious that maybe this is due to my last few experiences being in native Swift/SwiftUI instead of React/React Native. I didn't have a favorite tool or pattern I wanted to use. In my previous experiences, I've implemented Redux (without Redux Toolkit), and also just State/Context.
@@ -100,6 +167,8 @@ A big advantage of using Redux is that I can now inspect the state using [Reacto
 This is a small note. I didn't want to use AI/LLM such as Codex or Claude Code to solve the problem. I wanted to highlight what I already knew, plus some things I have researched in the middle of the assignment.
 
 However, in the real work, how LLMs handle my codebase would influence the set of tools I would choose for the implementation. Reducing the context for the LLM to ingest and using widely known tools are very important constraints in real life settings.
+
+The only part of the code in which I used some of these tools was for the UI layer, as the LLMs are great tools for helping with animations and layout definition in my experience.
 
 ## Shortcomings
 
