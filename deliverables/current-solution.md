@@ -76,7 +76,24 @@ This worked well for me in my tests and looked much more natural.
 
 On this one, I also tried three different solutions. I'm conscious that maybe this is due to my last few experiences being in native Swift/SwiftUI instead of React/React Native. I didn't have a favorite tool or pattern I wanted to use. In my previous experiences, I've implemented Redux (without Redux Toolkit), and also just State/Context.
 
-### UI layer decomposition
+I wanted to choose something that let me:
+
+1. Model naturally the SSE events and the Finite State Machine which created the messages.
+2. Write minimal boilerplate. This is a demo app, although this is generally a good tradeoff. The solution should be as simple as possible to reduce cognitive load.
+3. Not pollute the UI components. I wanted to keep presentational UI components as focused to the presentation as possible.
+
+I tried some things before deciding on the final solution:
+1. I started installing [Zustand](https://zustand-demo.pmnd.rs/), but it didn't resemble the FSM design I wanted for the project.
+2. I then removed Zustand from the project and tried just hooks, with a [`useChatConnection`](https://github.com/themobilefirstco/app-technical-test/blob/03842820924c84f8e2c89e478bb689cb3155cb64/utils/chat/useChatConnection.ts) hook which was responsible for keeping track of the messages incoming and returned the messages for the UI to display. This was great for the UI, but it used `Chat` and `handleMessageReceived` under the hood, which weren't idiomatic enough for me. Another drawback I noticed was that the state was not very easy to inspect. I wanted to prioritize actions/state inspection for debugging.
+
+I finally did this:
+
+1. Implement Redux, with the technical details you can read on the previous section. 
+2. There is a single Redux slice, called [`chatSlice.ts`](https://github.com/fmo91/app-technical-test/blob/main/redux/features/chatSlice.ts).
+3. There is a [container component](https://github.com/fmo91/app-technical-test/blob/main/app/index.tsx), which sets the SSE connection up.
+4. There are presentational components, starting from [`ChatScreenContent`](https://github.com/fmo91/app-technical-test/blob/main/app/ChatScreenContent.tsx), and following with other [smaller components](https://github.com/fmo91/app-technical-test/tree/main/components). These are only concerned of the visual aspect of the app.
+
+A big advantage of using Redux is that I can now inspect the state using [Reactotron](https://docs.infinite.red/reactotron/).
 
 ### AI/LLM usage for development
 
