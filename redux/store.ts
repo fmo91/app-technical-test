@@ -1,14 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit';
 import chatReducer from './features/chatSlice';
-import { sseConnectionMiddleware } from './middlewares/sseConnection';
+
+const createEnhancers = (getDefaultEnhancers: any) => {
+  if (__DEV__) {
+    const reactotron = require("../ReactotronConfig").default
+    return getDefaultEnhancers().concat(reactotron.createEnhancer())
+  } else {
+    return getDefaultEnhancers()
+  }
+}
 
 export const store = configureStore({
   reducer: {
     chat: chatReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
-	sseConnectionMiddleware,
-  ]),
+  enhancers: createEnhancers,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
