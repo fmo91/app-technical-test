@@ -7,7 +7,7 @@ export default function AgentMessageRow({ item }: { item: AgentMessage }) {
   const { content } = item;
 
   return (
-	<View style={styles.container}>
+	<View style={styles.container} testID={item.messageId + '-agent-row'}>
 	  <View style={styles.bubble}>
 		<Text style={styles.roleLabel}>{item.role.toUpperCase()}</Text>
 		{content?.textChunks.length ? (

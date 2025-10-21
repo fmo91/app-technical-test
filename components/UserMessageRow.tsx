@@ -5,7 +5,7 @@ import StreamingText from './StreamingText';
 
 export default function UserMessageRow({ item }: { item: UserMessage }) {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={ item.messageId + '-user-row' }>
       <View style={styles.bubble}>
         <StreamingText chunks={item.content.textChunks} messageId={item.messageId} />
       </View>

@@ -33,5 +33,6 @@ export default function MessagesList({
 					return <></>; // TODO: Handle this case properly
 			}
 		}}
+		testID="messages-list"
 	/>;
 }
