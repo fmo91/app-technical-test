@@ -7,7 +7,7 @@ export default function UserMessageRow({ item }: { item: UserMessage }) {
   return (
     <View style={styles.container} testID={ item.messageId + '-user-row' }>
       <View style={styles.bubble}>
-        <StreamingText chunks={item.content.textChunks} messageId={item.messageId} />
+        <StreamingText chunks={item.content.textChunks} messageId={item.messageId} testID='message-content' />
       </View>
     </View>
   );
