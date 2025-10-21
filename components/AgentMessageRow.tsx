@@ -11,32 +11,32 @@ export default function AgentMessageRow({ item }: { item: AgentMessage }) {
 	  <View style={styles.bubble}>
 		<Text style={styles.roleLabel}>{item.role.toUpperCase()}</Text>
 		{content?.textChunks.length ? (
-		  <StreamingText chunks={content.textChunks} messageId={item.messageId} />
+		  <StreamingText chunks={content.textChunks} messageId={item.messageId} testID="message-content" />
 		) : null}
-		{content?.component ? renderComponent(content.component) : null}
+		{content?.component ? renderComponent(content.component, item.messageId) : null}
 	  </View>
 	</View>
   );
 }
 
-function renderComponent(component: AgentMessageComponent) {
+function renderComponent(component: AgentMessageComponent, messageId?: string) {
   switch (component.type) {
 	case 'contact_badge':
-	  return <ContactBadge metadata={component.metadata ?? {}} />;
+	  return <ContactBadge metadata={component.metadata ?? {}} messageId={messageId} />;
 	case 'calendar_event':
-	  return <CalendarEventCard metadata={component.metadata ?? {}} />;
+	  return <CalendarEventCard metadata={component.metadata ?? {}} messageId={messageId} />;
 	default:
 	  return null;
   }
 }
 
-function ContactBadge({ metadata }: { metadata: ContactBadgeComponentMetadata }) {
+function ContactBadge({ metadata, messageId }: { metadata: ContactBadgeComponentMetadata, messageId?: string }) {
   const { name, email, company, profilePicture } = metadata ?? {};
   const showAvatar = typeof profilePicture === 'string' && profilePicture.length > 0;
   const initial = name ? name.trim().charAt(0).toUpperCase() : '?';
 
   return (
-	<View style={styles.contactCard}>
+	<View style={styles.contactCard} testID={messageId ? `${messageId}-contact-badge` : undefined}>
 	  {showAvatar ? (
 		<Image source={{ uri: profilePicture }} style={styles.avatar} />
 	  ) : (
@@ -53,11 +53,11 @@ function ContactBadge({ metadata }: { metadata: ContactBadgeComponentMetadata })
   );
 }
 
-function CalendarEventCard({ metadata }: { metadata: CalendarEventComponentMetadata }) {
+function CalendarEventCard({ metadata, messageId }: { metadata: CalendarEventComponentMetadata, messageId?: string }) {
   const { title, date, time, status } = metadata ?? {};
 
   return (
-	<View style={styles.eventCard}>
+	<View style={styles.eventCard} testID={messageId ? `${messageId}-calendar-event` : undefined}>
 	  {title ? <Text style={styles.eventTitle}>{title}</Text> : null}
 	  <View style={styles.eventMetaRow}>
 		{date ? <Text style={styles.eventMeta}>{date}</Text> : null}

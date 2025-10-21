@@ -2,13 +2,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-export default function StreamingText({ chunks, messageId }: { chunks: string[]; messageId: string }) {
+export default function StreamingText({ chunks, messageId, testID }: { chunks: string[]; messageId: string, testID?: string }) {
   if (chunks.length === 0) {
 	return null;
   }
 
   return (
-	<View style={styles.messageInline}>
+	<View style={styles.messageInline} testID={testID}>
 	  {chunks.map((chunk, index) => (
 		<AnimatedChunk key={`${messageId}-chunk-${index}`} text={chunk} />
 	  ))}
